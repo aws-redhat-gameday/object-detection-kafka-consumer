@@ -33,10 +33,11 @@ def main():
 
     try:
         for record in consumer:
-            print("Image received...")
+            print("Image received... ", end="")
             msg = record.value.decode('utf-8')
             dict = json.loads(msg)
             result = predict(dict)
+            print("Image analyzed... ", end="")
             dict['prediction'] = result
             producer.send(KAFKA_PRODUCER_TOPIC, json.dumps(dict).encode('utf-8'))
             producer.flush()
