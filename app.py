@@ -33,12 +33,14 @@ def main():
 
     try:
         for record in consumer:
+            print("Image received...")
             msg = record.value.decode('utf-8')
             dict = json.loads(msg)
             result = predict(dict)
             dict['prediction'] = result
             producer.send(KAFKA_PRODUCER_TOPIC, json.dumps(dict).encode('utf-8'))
             producer.flush()
+            print("Objects sent back.")
     finally:
         print("Closing KafkaTransformer...")
         consumer.close()
